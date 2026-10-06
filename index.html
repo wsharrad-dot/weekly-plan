@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<script>window.API_URL = "https://script.google.com/macros/s/AKfycby2zfuf3xpjRIEnzqXNhNU24DCYmVIX6gbRL1cAYaOmR-g45_KrwebrJyP38BgonSR8SA/exec"; window.STAFF_URL = "https://script.google.com/a/macros/nobala.edu.sa/s/AKfycbyESz2-ADderxMnpoRT6ZLViIvP--kzZmjTwPundyH502KVcDn-ZFXUMT28NYlJhyFr1w/exec"; window.DATA_URL = "https://raw.githubusercontent.com/wsharrad-dot/weekly-plan/data/data.json";</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الخطة الدراسية الأسبوعية</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef1f5;--card:#fff;--ink:#14161a;--muted:#7a808c;--line:#e6e9ee;--black:#111317;
+  --lilac:#ead9fb;--lilac-ink:#6b3fa0;--blue:#d6e8fb;--blue-ink:#235d9c;--green:#d6f2dc;--green-ink:#24774a;
+  --yellow:#fbefc4;--yellow-ink:#8a6a00;--peach:#fde2d2;--peach-ink:#a4511f;--pink:#fbdbea;--pink-ink:#a3346d;
+  color-scheme:light;
+  --alert:#e5484d;--alert-2:#ff7a45;
+  --mint:#d3f1ee;--mint-ink:#1f7a70;--sky:#dbe4fd;--sky-ink:#3a4fb3;--grey:#eceef2;--grey-ink:#4b5260;--red:#e5484d
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:104px;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:0 16px}
+button,select,input{font:inherit;color:inherit}
+.screen{display:none}.screen.on{display:block}
+.panel{background:var(--card);border-radius:28px;padding:18px;margin-top:14px}
+
+/* top */
+.top{display:flex;align-items:center;gap:12px;padding:20px 0 4px}
+.avatar{width:46px;height:46px;border-radius:50%;background:var(--black);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+.top small{color:var(--muted);font-size:13px;display:block}
+.top h1{font-size:22px;font-weight:700;line-height:1.3}
+.iconbtn{margin-inline-start:auto;width:42px;height:42px;border-radius:50%;border:0;background:var(--card);display:grid;place-items:center;font-size:18px;cursor:pointer;flex:none}
+.sub{color:var(--muted);font-size:14px;margin-top:2px}.sub b{color:var(--ink)}
+.pick{display:flex;gap:8px;margin-top:14px}
+.pick select{flex:1;min-width:0;appearance:none;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a808c' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat left 14px center;border:0;border-radius:16px;padding:12px 14px 12px 34px;font-size:15px;font-weight:600}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+/* Dark "photo" tiles: a scene drawn with gradients + one large object, darkened toward the text. */
+.tile{position:relative;overflow:hidden;border-radius:26px;padding:14px;min-height:168px;display:flex;flex-direction:column;justify-content:space-between;border:0;text-align:right;cursor:pointer;color:#fff;background:var(--scene)}
+.tile:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0000 30%,#000000b8 100%);z-index:0}
+.tile .art{position:absolute;top:18%;left:50%;transform:translateX(-50%);font-size:64px;filter:drop-shadow(0 8px 14px #0006);z-index:0;pointer-events:none}
+.tile>*:not(.art){position:relative;z-index:1}
+.tile .ic{width:34px;height:34px;border-radius:50%;background:#ffffff2e;backdrop-filter:blur(4px);display:grid;place-items:center;font-size:15px}
+.tile b{font-size:30px;font-weight:700;line-height:1.1;display:block}
+.tile strong{font-size:14px;font-weight:700;display:block;margin-top:2px}
+.tile span{font-size:12px;opacity:.85;display:block}
+.tile:focus-visible{outline:3px solid var(--black);outline-offset:2px}
+.s-att{--scene:radial-gradient(120% 70% at 50% 0%,#5b7d6a 0%,#2f4a3d 55%,#1d2b24 100%)}
+.s-hw{--scene:radial-gradient(110% 70% at 50% 10%,#c9a27a 0%,#7a5636 55%,#3b2817 100%)}
+.s-ex{--scene:radial-gradient(120% 70% at 50% 0%,#4a5a78 0%,#26304a 55%,#141a2a 100%)}
+.s-day{--scene:radial-gradient(120% 70% at 50% 0%,#8a8fa0 0%,#4a4e5c 55%,#23252d 100%)}
+
+.head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.head h2{font-size:17px;font-weight:700}.head small{color:var(--muted);font-size:12px}
+.link{background:none;border:0;color:var(--muted);font-size:13px;cursor:pointer;padding:0}
+
+/* subject rows (home) */
+.row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.row time{width:22px;color:var(--muted);font-size:13px;font-weight:600;text-align:center;flex:none}
+.pill{flex:1;display:flex;align-items:center;gap:10px;border-radius:18px;padding:10px 12px;min-width:0}
+.pill .ic{width:30px;height:30px;border-radius:50%;background:#ffffffb3;display:grid;place-items:center;font-size:15px;flex:none}
+.pill b{font-size:14px;display:block}.pill small{font-size:12px;opacity:.8;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill>div{min-width:0}
+.badge{margin-inline-start:auto;font-size:11px;font-weight:700;background:var(--black);color:#fff;border-radius:999px;padding:2px 8px;flex:none}
+
+/* notice / events */
+/* alerts band: school notices + upcoming dates, always first on the home screen */
+#alerts{display:grid;gap:10px;margin-top:14px}
+#alerts:empty,#notices:empty,#events:empty{display:none}
+#notices{display:grid;gap:10px}
+.notice{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(135deg,var(--alert),var(--alert-2));color:#fff;border-radius:26px;padding:18px;box-shadow:0 10px 24px -12px var(--alert)}
+.notice .ic{width:46px;height:46px;border-radius:50%;background:#ffffff30;display:grid;place-items:center;font-size:22px;flex:none;position:relative}
+.notice .ic:after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid #ffffff80;animation:ping 1.8s ease-out infinite}
+@keyframes ping{from{transform:scale(.9);opacity:1}to{transform:scale(1.35);opacity:0}}
+@media (prefers-reduced-motion:reduce){.notice .ic:after{animation:none}}
+.notice small{font-size:12px;font-weight:700;letter-spacing:.3px;opacity:.9;display:block}
+.notice p{font-size:16px;font-weight:600;line-height:1.65;white-space:pre-line;margin-top:2px}
+.notice a.lnk{color:#fff;text-decoration:underline}
+.events{background:var(--card);border-radius:26px;padding:16px 18px;border:2px solid var(--black)}
+.events .head{margin-bottom:12px}
+.events h2:before{content:"🗓 "}
+.evlist{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.event{flex:0 0 auto;min-width:150px;max-width:220px;display:flex;gap:10px;align-items:center;background:var(--grey);border-radius:20px;padding:10px 12px}
+.event.soon{background:var(--yellow);color:var(--yellow-ink)}
+.date{width:50px;border-radius:14px;background:var(--black);color:#fff;text-align:center;padding:6px 0;flex:none;line-height:1.15}
+.date small{color:#ffffffb3!important}
+.event>div:last-child{font-size:13.5px;font-weight:600;line-height:1.5}
+.event .when{font-size:11px;font-weight:700;display:block;opacity:.8}
+.staff{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.staff a{display:inline-flex;align-items:center;gap:6px;background:var(--black);color:#fff;text-decoration:none;font-weight:700;font-size:14px;border-radius:999px;padding:10px 16px}
+.staff:empty{display:none}
+.bell{position:relative}
+.bell i{position:absolute;top:-3px;left:-3px;min-width:20px;height:20px;border-radius:999px;background:var(--alert);color:#fff;font-style:normal;font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 5px}
+.bell i:empty{display:none}
+#hero .iconbtn+.iconbtn{margin-inline-start:0}
+@media (max-width:759px){ body:not([data-screen="home"]) #hero, body:not([data-screen="home"]) #alerts{display:none} }
+.date b{display:block;font-size:17px}.date small{font-size:10px;color:var(--muted)}
+.event p{font-size:14px}
+.tools{display:flex;gap:8px;margin-top:14px}
+.tools select,.tools button{flex:1;min-width:0;border:0;border-radius:16px;background:var(--card);padding:12px;font-size:14px;font-weight:600;cursor:pointer}
+.old{background:#fde4e4;color:#9b2226;border-radius:16px;padding:10px 14px;margin-top:12px;font-size:13px}
+.old button{background:none;border:0;text-decoration:underline;cursor:pointer;padding:0;color:inherit}
+
+/* timetable */
+.date-title{font-size:13px;color:var(--muted)}.big{font-size:28px;font-weight:700;margin-bottom:12px}
+.strip{display:flex;justify-content:space-between;gap:4px}
+.strip button{flex:1;border:0;background:none;border-radius:999px;padding:8px 0 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
+.strip small{font-size:12px;color:var(--muted)}.strip b{font-size:17px}
+.strip button.on{background:var(--black);color:#fff}.strip button.on small{color:#ffffffb3}
+.strip button.today:after{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;position:absolute;bottom:4px}
+.share{display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:#fff;text-decoration:none;font-weight:700;border-radius:18px;padding:12px;margin-top:14px;font-size:14px}
+.tl{margin-top:16px}
+.slot{display:grid;grid-template-columns:40px 1fr;gap:10px;margin-bottom:12px}
+.slot .n{font-weight:700;font-size:15px;padding-top:12px;text-align:center}
+.slot .n small{display:block;font-size:10px;color:var(--muted);font-weight:500}
+.lesson{border-radius:24px;padding:14px 16px;position:relative;overflow:hidden}
+.lesson .ic{position:absolute;left:12px;bottom:6px;font-size:40px;opacity:.22}
+.lesson b{font-size:16px;display:flex;align-items:center;gap:6px}
+.lesson .topic{font-size:13.5px;margin-top:2px;white-space:pre-line;line-height:1.55;opacity:.9}
+.lesson .hw{margin-top:10px;background:#ffffffb8;border-radius:14px;padding:8px 10px;font-size:13px;line-height:1.6;white-space:pre-line;color:var(--ink);position:relative;z-index:1}
+.lesson .hw:before{content:"📝 الواجب";display:block;font-weight:700;font-size:11px;color:var(--muted)}
+.tag{font-size:10.5px;font-weight:700;background:var(--black);color:#fff;border-radius:999px;padding:1px 8px}
+a.lnk{color:var(--blue-ink);font-weight:700}
+
+/* homework */
+.search{display:flex;align-items:center;gap:8px;background:var(--grey);border-radius:16px;padding:0 14px;margin:6px 0 12px}
+.search input{border:0;background:none;padding:12px 0;width:100%;outline:none;font-size:14px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px}
+.chips button{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer}
+.chips button.on{background:var(--black);border-color:var(--black);color:#fff}
+.hwc{border:1px solid var(--line);border-radius:22px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+.hwc .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:17px;flex:none}
+.hwc .k{font-size:11px;font-weight:700;letter-spacing:.3px;color:var(--muted)}
+.hwc b{font-size:15px;display:block;margin:1px 0 3px}
+.hwc p{font-size:13.5px;line-height:1.6;white-space:pre-line}
+.hwc .meta{font-size:12px;color:var(--muted);margin-top:6px}
+.hwc label{margin-inline-start:auto;flex:none;cursor:pointer}
+.hwc input{width:22px;height:22px;accent-color:var(--black);cursor:pointer}
+.hwc.done{opacity:.5}.hwc.done p{text-decoration:line-through}
+.empty{color:var(--muted);text-align:center;padding:24px 0;font-size:14px}
+
+/* nav */
+.nav{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom, 0px));left:50%;transform:translateX(-50%);background:var(--black);border-radius:999px;padding:7px;display:flex;gap:4px;box-shadow:0 10px 30px #0004;z-index:5}
+.nav button{border:0;background:none;color:#ffffffb3;border-radius:999px;padding:10px 16px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.nav button .i{font-size:17px}
+.nav button.on{background:#fff;color:var(--black)}
+.foot{font-size:11px;text-align:center;color:var(--muted);margin:18px 0}
+
+/* subject colours */
+.c-lilac{background:var(--lilac);color:var(--lilac-ink)}.c-blue{background:var(--blue);color:var(--blue-ink)}.c-green{background:var(--green);color:var(--green-ink)}
+.c-yellow{background:var(--yellow);color:var(--yellow-ink)}.c-peach{background:var(--peach);color:var(--peach-ink)}.c-pink{background:var(--pink);color:var(--pink-ink)}
+.c-mint{background:var(--mint);color:var(--mint-ink)}.c-sky{background:var(--sky);color:var(--sky-ink)}.c-grey{background:var(--grey);color:var(--grey-ink)}
+
+/* Tablet: home beside a stacked timetable + homework. Computer: three columns, like the desktop view. */
+@media (hover:hover){.tile,.strip button,.chips button,.hwc{transition:transform .15s}.tile:hover{transform:translateY(-2px)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media (min-width:760px){
+  body{padding-bottom:24px}
+  .wrap{max-width:1000px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:20px;align-items:start}
+  .screen{display:block!important;min-width:0}
+  #hero,#alerts{grid-column:1 / -1}
+  #hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);column-gap:20px;align-items:end}
+  #hero .sub{grid-column:1}
+  #hero .pick{grid-column:2;grid-row:1 / span 2;margin-top:0}
+  #alerts{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));align-items:stretch}
+  #s-home{grid-column:1;grid-row:3 / span 2}
+  #s-time{grid-column:2;grid-row:3}
+  #s-hw{grid-column:2;grid-row:4}
+  .foot{grid-column:1 / -1}
+  .nav{display:none}
+  #s-time .panel,#s-hw .panel{margin-top:14px}
+  #s-time .panel{margin-top:20px}
+}
+@media (min-width:1180px){
+  .wrap{max-width:1360px;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr) minmax(0,1fr);column-gap:22px}
+  #s-home{grid-row:3}
+  #s-time{grid-column:2;grid-row:3}
+  #s-hw{grid-column:3;grid-row:3}
+  #s-hw .panel{margin-top:20px}
+  #s-time .panel,#s-hw .panel{position:sticky;top:calc(16px + env(safe-area-inset-top, 0px));max-height:calc(100vh - 32px);overflow-y:auto;scrollbar-width:thin}
+}
+#print{display:none}
+@media print{
+  body{background:#fff;padding:0}
+  body>*:not(#print){display:none!important}
+  #print{display:block;font-size:11px}
+  #print h2{font-size:15px;margin-bottom:6px}
+  #print table{width:100%;border-collapse:collapse;margin-bottom:8px;page-break-inside:avoid}
+  #print th,#print td{border:1px solid #999;padding:3px 5px;text-align:right;vertical-align:top;white-space:pre-line}
+  #print th{background:#eee}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="hero">
+    <div class="top">
+      <div class="avatar" id="avatar">ش</div>
+      <div><small id="greet">صباح الخير</small><h1>ولي الأمر الكريم 👋</h1></div>
+      <button class="iconbtn bell" id="bellBtn" type="button" aria-label="الإعلانات والمواعيد">🔔<i id="bellN"></i></button>
+      <button class="iconbtn" id="printBtn" type="button" title="طباعة الأسبوع" aria-label="طباعة الأسبوع">🖨</button>
+    </div>
+    <p class="sub" id="sub">جارٍ التحميل…</p>
+    <div class="staff" id="staff"></div>
+    <div class="pick"><select id="grade" aria-label="الصف"></select><select id="cls" aria-label="الفصل"></select></div>
+  </header>
+  <div id="alerts" aria-live="polite"><div id="notices"></div><div id="events"></div></div>
+
+  <!-- HOME -->
+  <section class="screen on" id="s-home">
+    <div id="old"></div>
+    <div class="tiles">
+      <div class="tile s-att" role="group" aria-label="الحضور"><span class="art" aria-hidden="true">🏫</span><div class="ic">◷</div><div><b id="n-att">—</b><strong>الحضور</strong><span id="l-att">لا توجد بيانات بعد</span></div></div>
+      <button class="tile s-hw" data-go="hw" data-filter="todo"><span class="art" aria-hidden="true">🍎</span><div class="ic">📋</div><div><b id="n-todo">–</b><strong>الواجبات</strong><span>غير منجزة هذا الأسبوع</span></div></button>
+      <button class="tile s-ex" data-go="hw" data-filter="test"><span class="art" aria-hidden="true">📚</span><div class="ic">📝</div><div><b id="n-exams">–</b><strong>الاختبارات</strong><span id="l-exams">الأسبوع القادم</span></div></button>
+      <button class="tile s-day" data-go="time"><span class="art" aria-hidden="true">🎒</span><div class="ic">📅</div><div><b id="n-lessons">–</b><strong id="l-lessons">حصص اليوم</strong><span id="l-hw">–</span></div></button>
+    </div>
+    <div class="panel">
+      <div class="head"><div><h2 id="h-today">اليوم</h2><small id="h-today-sub"></small></div><button class="link" data-go="time">عرض الكل ‹</button></div>
+      <div id="todayList"></div>
+    </div>
+    <div class="tools"><select id="week" aria-label="الأسبوع"></select></div>
+  </section>
+
+  <!-- TIMETABLE -->
+  <section class="screen" id="s-time">
+    <div class="panel" style="margin-top:20px">
+      <div class="date-title" id="t-date"></div>
+      <div class="big" id="t-title">اليوم</div>
+      <div class="strip" id="strip"></div>
+      <a class="share" id="share" target="_blank" rel="noopener">مشاركة الواجبات عبر واتساب</a>
+      <div class="tl" id="timeline"></div>
+    </div>
+  </section>
+
+  <!-- HOMEWORK -->
+  <section class="screen" id="s-hw">
+    <div class="panel" style="margin-top:20px">
+      <div class="head"><div><small>الواجبات</small><h2 style="font-size:22px">واجبات الأسبوع</h2></div></div>
+      <div class="search">🔍<input id="q" type="search" placeholder="ابحث في الواجبات" aria-label="بحث"></div>
+      <div class="chips" id="chips">
+        <button data-f="all" class="on">الكل</button><button data-f="todo">غير منجز</button><button data-f="done">منجز</button><button data-f="today">اليوم</button><button data-f="test">اختبارات</button>
+      </div>
+      <div id="hwList"></div>
+    </div>
+  </section>
+  <p class="foot" id="foot"></p>
+</div>
+
+<div id="print"></div>
+<nav class="nav" aria-label="التنقل">
+  <button data-go="home" class="on"><span class="i">⌂</span>الرئيسية</button>
+  <button data-go="time"><span class="i">◷</span>الجدول</button>
+  <button data-go="hw"><span class="i">✎</span>الواجبات</button>
+</nav>
+
+<script>
+const WEEKDAYS = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
+const GREG = 'ar-SA-u-ca-gregory';
+const $ = s => document.querySelector(s), g = $('#grade'), c = $('#cls');
+const esc = s => String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const store = {
+  get(k, d){ try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch(e) { return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} },
+};
+let DATA, screen = 'home', day = null, older = null, filter = 'all'; // older = a previous week being browsed: {grade, data}
+
+// Subject -> colour + icon, matched on the Arabic or English names used in the sheets.
+const SUBJECTS = [
+  [/لغتي|عربي|arabic/i, 'lilac', '📖'], [/رياضيات|math/i, 'blue', '➗'], [/علوم|science/i, 'green', '🔬'],
+  [/english|انجليزي|إنجليزي/i, 'yellow', '🔤'], [/قرآن|قرأن|إسلامية|اسلامية|islamic|تجويد/i, 'mint', '🕌'],
+  [/بدنية|p\.?e\b/i, 'peach', '⚽'], [/فنية|art/i, 'pink', '🎨'], [/stem|رقمية|ict|حاسب/i, 'sky', '🤖'],
+  [/اجتماعيات|حياتية|social/i, 'grey', '🌍'],
+];
+function subj(name){ const m = SUBJECTS.find(s => s[0].test(name || '')); return m ? { cls: 'c-' + m[1], ic: m[2] } : { cls: 'c-grey', ic: '📘' }; }
+
+function dayName(d){ return d.day.split('،')[0].trim().replace('الإثنين','الاثنين'); }
+function dayDate(d){ return (d.day.split('،')[1] || '').trim(); }
+function todayIndex(days, now){ return days.findIndex(d => dayName(d) === WEEKDAYS[now.getDay()]); }
+// Which day opens first: today, but tomorrow once school is out (1 pm); Sunday on the weekend.
+function defaultDay(days, now){
+  const i = todayIndex(days, now);
+  if (i < 0) return 0;
+  return now.getHours() >= 13 && i < days.length - 1 ? i + 1 : i;
+}
+function linkify(html){ return html.replace(/https?:\/\/[^\s<"]+/g, u => `<a class="lnk" href="${u}" target="_blank" rel="noopener">رابط ↗</a>`); }
+function cur(){
+  const gr = older && older.grade === g.value ? older.data : DATA.grades[g.value];
+  return gr && { gr, days: gr.classes[c.value] || [], tests: gr.tests[c.value] || [] };
+}
+const isCurrent = () => !older || older.grade !== g.value;
+const isTest = (x, d, i) => x.tests.some(t => t.day === dayName(d) && t.period === i + 1);
+const doneKey = () => `wp-done|${g.value}|${c.value}|${cur() ? cur().gr.week : ''}`;
+const doneSet = () => new Set(store.get(doneKey(), []));
+function dayLabel(x, i, now){
+  const ti = isCurrent() ? todayIndex(x.days, now) : -1;
+  return i === ti ? 'اليوم' : ti >= 0 && i === ti + 1 ? 'غداً' : dayName(x.days[i]);
+}
+
+function fillCls(pref){
+  const gr = DATA.grades[g.value];
+  const names = gr ? Object.keys(gr.classes).filter(n => gr.classes[n].some(d => d.periods.some(p => p[1] || p[2]))) : [];
+  c.innerHTML = names.map(n => `<option>${esc(n)}</option>`).join('');
+  if (names.includes(pref)) c.value = pref;
+}
+function fillWeeks(){
+  const gr = DATA.grades[g.value], w = $('#week');
+  w.innerHTML = gr ? (gr.weeks || [gr.week]).map(n => `<option value="${n}">🗂 الأسبوع ${n}${n === gr.week ? ' (الحالي)' : ''}</option>`).join('') : '';
+  if (gr) w.value = isCurrent() ? gr.week : older.data.week;
+}
+
+function shareLink(days){
+  const d = days[day], hw = d.periods.filter(p => p[2]);
+  const text = `📚 واجبات ${c.value} – ${d.day}\n\n` +
+    (hw.length ? hw.map(p => `• ${p[0]}: ${p[2]}`).join('\n') : 'لا توجد واجبات') + `\n\n${location.href}`;
+  return 'https://wa.me/?text=' + encodeURIComponent(text);
+}
+
+function hwItems(x){
+  const out = [];
+  x.days.forEach((d, di) => d.periods.forEach((p, pi) => { if (p[2]) out.push({ d, di, p, pi, id: di + '-' + pi, test: isTest(x, d, pi) }); }));
+  return out;
+}
+
+function renderHome(x, now){
+  $('#greet').textContent = now.getHours() < 12 ? 'صباح الخير' : 'مساء الخير';
+  $('#avatar').textContent = (c.value || 'ش').trim().charAt(0);
+  const events = DATA.events || [];
+  $('#bellN').textContent = DATA.notices.length + events.length || '';
+  $('#notices').innerHTML = DATA.notices.map(n => `<div class="notice" role="alert"><div class="ic">📢</div><div><small>إعلان مهم من المدرسة</small><p>${linkify(esc(n))}</p></div></div>`).join('');
+  $('#events').innerHTML = events.length ? `<div class="events"><div class="head"><h2>المواعيد القادمة</h2><small>${events.length} مواعيد</small></div><div class="evlist">${events.map(e => {
+    const dt = new Date(e.date + 'T00:00');
+    const days = Math.round((dt - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 864e5);
+    const when = days <= 0 ? 'اليوم' : days === 1 ? 'غداً' : days === 2 ? 'بعد يومين' : days <= 10 ? `بعد ${days} أيام` : `بعد ${days} يوماً`;
+    return `<div class="event ${days <= 3 ? 'soon' : ''}"><div class="date"><b>${dt.toLocaleDateString(GREG, { day: 'numeric' })}</b><small>${dt.toLocaleDateString(GREG, { month: 'short' })}</small></div><div><span class="when">${when} · ${dt.toLocaleDateString(GREG, { weekday: 'long' })}</span>${esc(e.text)}</div></div>`;
+  }).join('')}</div></div>` : '';
+  $('#old').innerHTML = isCurrent() ? '' : `<div class="old">تعرض الآن خطة الأسبوع ${older.data.week} · <button id="back" type="button">العودة للأسبوع الحالي</button></div>`;
+  if (!x || !x.days.length){
+    $('#sub').textContent = 'لم تُنشر خطة هذا الفصل بعد.'; $('#todayList').innerHTML = '';
+    ['#n-lessons','#n-exams','#n-todo','#n-att'].forEach(s => $(s).textContent = '–'); return;
+  }
+  const d = x.days[day], items = hwItems(x), done = doneSet(), label = dayLabel(x, day, now);
+  $('#sub').innerHTML = `${esc(c.value)} · <b>الأسبوع ${x.gr.week}</b> · ${esc(dayDate(x.days[0]).replace(/\s*\d{4}$/,''))} – ${esc(dayDate(x.days[x.days.length-1]))}`;
+  $('#l-lessons').textContent = 'حصص ' + label;
+  $('#l-hw').textContent = d.periods.filter(p => p[2]).length + ' واجبات ' + label;
+  $('#n-lessons').textContent = d.periods.filter(p => p[0]).length;
+  $('#n-todo').textContent = items.filter(i => !done.has(i.id)).length;
+  // Exams next week: counted from next week's tab; 0 when it has none or isn't created yet.
+  const nx = (x.gr.nextTests || {})[c.value] || 0;
+  $('#n-exams').textContent = nx;
+  $('#l-exams').textContent = x.gr.nextWeek ? 'الأسبوع القادم (' + x.gr.nextWeek + ')' : 'الأسبوع القادم';
+  // Attendance: no source yet; shows "—" until the server sends gr.attendance[class] as a percentage.
+  const att = (x.gr.attendance || {})[c.value];
+  $('#n-att').textContent = att == null ? '—' : att + '%';
+  $('#l-att').textContent = att == null ? 'لا توجد بيانات بعد' : 'هذا الشهر';
+  $('#h-today').textContent = label; $('#h-today-sub').textContent = dayName(d) + ' ' + dayDate(d);
+  $('#todayList').innerHTML = d.periods.map((p, i) => { const s = subj(p[0]); return `<div class="row"><time>${i+1}</time><div class="pill ${s.cls}"><div class="ic">${s.ic}</div><div><b>${esc(p[0] || '—')}</b><small>${esc((p[1] || '').split('\n')[0] || '—')}</small></div>${isTest(x, d, i) ? '<span class="badge">اختبار</span>' : ''}</div></div>`; }).join('');
+}
+
+function renderTime(x, now){
+  if (!x || !x.days.length){ $('#timeline').innerHTML = '<p class="empty">لم تُنشر خطة هذا الفصل بعد.</p>'; $('#strip').innerHTML = ''; return; }
+  const ti = isCurrent() ? todayIndex(x.days, now) : -1, d = x.days[day];
+  $('#t-date').textContent = dayDate(d) + ' · الأسبوع ' + x.gr.week;
+  $('#t-title').textContent = dayLabel(x, day, now);
+  $('#strip').innerHTML = x.days.map((dd, i) => `<button data-d="${i}" class="${i === day ? 'on' : ''} ${i === ti ? 'today' : ''}"><small>${esc(dayName(dd))}</small><b>${esc((dayDate(dd).match(/^\d+/) || [''])[0])}</b></button>`).join('');
+  $('#share').href = shareLink(x.days);
+  $('#share').textContent = `مشاركة واجبات ${dayName(d)} عبر واتساب`;
+  $('#timeline').innerHTML = d.periods.map((p, i) => { const s = subj(p[0]); return `<div class="slot"><div class="n">${i+1}<small>حصة</small></div>
+    <div class="lesson ${s.cls}"><span class="ic">${s.ic}</span><b>${esc(p[0] || '—')}${isTest(x, d, i) ? '<span class="tag">اختبار</span>' : ''}</b>
+    <div class="topic" dir="auto">${linkify(esc(p[1] || '—'))}</div>${p[2] ? `<div class="hw" dir="auto">${linkify(esc(p[2]))}</div>` : ''}</div></div>`; }).join('');
+}
+
+function renderHw(x, now){
+  document.querySelectorAll('#chips button').forEach(b => b.classList.toggle('on', b.dataset.f === filter));
+  if (!x || !x.days.length){ $('#hwList').innerHTML = '<p class="empty">لم تُنشر خطة هذا الفصل بعد.</p>'; return; }
+  const done = doneSet(), q = $('#q').value.trim();
+  const items = hwItems(x).filter(i =>
+    filter === 'all' || (filter === 'todo' && !done.has(i.id)) || (filter === 'done' && done.has(i.id)) ||
+    (filter === 'today' && i.di === day) || (filter === 'test' && i.test))
+    .filter(i => !q || i.p.join(' ').includes(q));
+  $('#hwList').innerHTML = items.length ? items.map(i => { const s = subj(i.p[0]), isDone = done.has(i.id); return `<div class="hwc ${isDone ? 'done' : ''}">
+    <div class="ic ${s.cls}">${s.ic}</div><div style="min-width:0;flex:1"><div class="k">${esc(i.p[0])}${i.test ? ' · <span class="tag">اختبار</span>' : ''}</div>
+    <b dir="auto">${esc((i.p[1] || '').split('\n')[0] || i.p[0])}</b><p dir="auto">${linkify(esc(i.p[2]))}</p>
+    <div class="meta">${esc(dayLabel(x, i.di, now) === dayName(i.d) ? dayName(i.d) : dayLabel(x, i.di, now))} · ${esc(dayDate(i.d).replace(/\s*\d{4}$/,''))} · الحصة ${i.pi + 1}</div></div>
+    <label title="تم"><input type="checkbox" data-done="${i.id}" ${isDone ? 'checked' : ''} aria-label="تم الإنجاز"></label></div>`; }).join('')
+    : '<p class="empty">لا توجد واجبات هنا.</p>';
+}
+
+function render(){
+  const x = cur(), now = new Date();
+  if (x && x.days.length && (day === null || day >= x.days.length)) day = isCurrent() ? defaultDay(x.days, now) : 0;
+  renderHome(x, now); renderTime(x, now); renderHw(x, now);
+  document.body.dataset.screen = screen;
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === 's-' + screen));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.go === screen));
+  $('#foot').textContent = DATA.updated ? 'آخر تحديث: ' + new Date(DATA.updated).toLocaleString(GREG) : '';
+}
+
+const wide = () => matchMedia('(min-width:760px)').matches;
+// Phone: switch screens. Tablet/computer: every screen is visible, so bring the target into view instead.
+function go(to, f){
+  screen = to; if (f) filter = f; render();
+  if (wide()) document.getElementById('s-' + to).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  else window.scrollTo(0, 0);
+}
+
+function printWeek(){
+  const x = cur(); if (!x || !x.days.length) return;
+  $('#print').innerHTML = `<h2>الخطة الأسبوعية · ${esc(g.value)} · ${esc(c.value)} · الأسبوع ${x.gr.week}</h2>` +
+    x.days.map(d => `<table><tr><th colspan="4">${esc(d.day)}</th></tr><tr><th>#</th><th>المادة</th><th>الموضوع</th><th>الواجب</th></tr>` +
+      d.periods.map((p,i) => `<tr><td>${i+1}</td><td>${esc(p[0])}</td><td>${esc(p[1])}</td><td>${esc(p[2])}</td></tr>`).join('') + '</table>').join('');
+  window.print();
+}
+
+function loadWeek(num){
+  const gr = DATA.grades[g.value];
+  if (+num === gr.week){ older = null; day = null; fillWeeks(); render(); return; }
+  const got = data => { older = { grade: g.value, data }; day = 0; fillWeeks(); render(); };
+  if (window.google && google.script) google.script.run.withSuccessHandler(got).withFailureHandler(fail).getWeek(g.value, +num);
+  else if (window.API_URL) api('api=week&grade=' + encodeURIComponent(g.value) + '&num=' + (+num)).then(got, fail);
+  else if (window.PREVIEW_WEEKS && PREVIEW_WEEKS[g.value] && PREVIEW_WEEKS[g.value][num]) got(PREVIEW_WEEKS[g.value][num]); // preview: weeks bundled in
+  else { fillWeeks(); $('#old').innerHTML = '<div class="old">هذا الأسبوع غير متاح في المعاينة.</div>'; }
+}
+
+function start(data){
+  DATA = data;
+  const saved = store.get('wp-choice', {}), names = DATA.order || Object.keys(DATA.grades);
+  g.innerHTML = names.map(n => `<option>${esc(n)}</option>`).join('');
+  if (names.includes(saved.grade)) g.value = saved.grade;
+  fillCls(saved.cls); fillWeeks(); render();
+}
+const remember = () => store.set('wp-choice', { grade: g.value, cls: c.value });
+g.onchange = () => { fillCls(); older = null; day = null; fillWeeks(); remember(); render(); };
+c.onchange = () => { day = null; remember(); render(); };
+$('#week').onchange = e => loadWeek(e.target.value);
+$('#printBtn').onclick = printWeek;
+$('#bellBtn').onclick = () => { screen = 'home'; render(); $('#alerts').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+$('#q').oninput = () => render();
+document.addEventListener('click', e => {
+  if (!DATA) return;
+  const t = e.target;
+  const goBtn = t.closest('[data-go]'); if (goBtn) return go(goBtn.dataset.go, goBtn.dataset.filter || (goBtn.dataset.go === 'hw' ? 'all' : null));
+  const dBtn = t.closest('[data-d]'); if (dBtn){ day = +dBtn.dataset.d; return render(); }
+  const f = t.closest('[data-f]'); if (f){ filter = f.dataset.f; return render(); }
+  if (t.id === 'back') return loadWeek(DATA.grades[g.value].week);
+});
+document.addEventListener('change', e => {
+  const id = e.target.dataset && e.target.dataset.done; if (id === undefined) return;
+  const s = doneSet(); e.target.checked ? s.add(id) : s.delete(id); store.set(doneKey(), [...s]); render();
+});
+const fail = () => { $('#sub').textContent = 'تعذّر تحميل الخطة. أعد تحميل الصفحة بعد قليل.'; };
+// API_URL / STAFF_URL are set only in the GitHub Pages copy (build-pages.js).
+// Apps Script sometimes answers slowly or with an error page, so each call gets 25 s and up to 3 tries.
+const api = (q, tries = 3) => {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 25000);
+  return fetch(API_URL + '?' + q, { signal: ctl.signal }).then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(j => j.error ? Promise.reject(j.error) : j).finally(() => clearTimeout(t))
+    .catch(e => tries > 1 ? api(q, tries - 1) : Promise.reject(e));
+};
+
+if (window.google && google.script) {
+  google.script.run.withSuccessHandler(start).withFailureHandler(fail).getData();
+  // Staff shortcuts: only the staff deployment can tell who is signed in; the public link gets a sign-in button to it.
+  google.script.run.withSuccessHandler(w => {
+    if (!w || !w.url) return;
+    if (w.guest) return void ($("#staff").innerHTML = `<a href="${w.url}" target="_top">🔑 دخول المعلمين والإدارة</a>`);
+    $('#staff').innerHTML = (w.teacher ? `<a href="${w.url}?page=teacher" target="_top">✏️ لوحة المعلم: تعديل خطط مادتك</a>` : '') +
+      (w.admin ? `<a href="${w.url}?page=admin" target="_top">📋 متابعة الخطط</a>` : '');
+  }).withFailureHandler(() => {}).whoAmI();
+}
+else if (window.API_URL) { // hosted outside Google (GitHub Pages): plain JSON fetch, no Google login involved
+  // The last plan this phone loaded shows at once; the fresh one replaces it when it arrives.
+  const last = store.get('wp-data', null);
+  if (last) start(last);
+  // data.json is uploaded to GitHub every 5 minutes (Code.gs publishData_); Apps Script is only the fallback.
+  fetch(DATA_URL, { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject(r.status)).catch(() => api('api=data'))
+    .then(d => { store.set('wp-data', d); start(d); }, () => { if (!last) fail(); });
+  $('#staff').innerHTML = `<a href="${STAFF_URL}" target="_top">🔑 دخول المعلمين والإدارة</a>`;
+}
+else { const s = document.createElement('script'); s.src = 'preview-data.js'; s.onload = () => start(window.PREVIEW); s.onerror = fail; document.head.appendChild(s); } // local preview only
+</script>
+</body>
+</html>
